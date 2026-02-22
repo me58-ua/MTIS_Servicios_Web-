@@ -1,18 +1,53 @@
 /* eslint-disable no-unused-vars */
 const Service = require('./Service');
+const mysql = require('mysql2/promise');
+const nodemailer = require('nodemailer');
+
+const pool = mysql.createPool({
+  host: 'localhost',
+  user: 'root',
+  password: 'root',
+  database: 'practica1'
+});
+
+const transporter = nodemailer.createTransport({
+  host: 'localhost',
+  port: 1025,
+  secure: false,
+});
 
 /**
 * Notificar un error a un empleado por email
 *
+* wsKey String 
 * notificacionError NotificacionError 
 * no response value expected for this operation
 * */
-const notificacionesErrorPOST = ({ notificacionError }) => new Promise(
+const notificacionesErrorPOST = ({ wsKey, notificacionError }) => new Promise(
   async (resolve, reject) => {
     try {
-      resolve(Service.successResponse({
-        notificacionError,
-      }));
+      const [keyResult] = await pool.query('SELECT * FROM restkey WHERE keyValue = ?', [wsKey]);
+      if (keyResult.length === 0) {
+        return resolve(Service.rejectResponse('WSKey inválida', 401));
+      }
+
+      const { nifnie, error } = notificacionError;
+
+      const [result] = await pool.query('SELECT email FROM empleados WHERE nifnie = ?', [nifnie]);
+      if (result.length === 0) {
+        return resolve(Service.rejectResponse('Empleado no encontrado', 404));
+      }
+
+      const email = result[0].email;
+      await transporter.sendMail({
+        from: 'noreply@empresa.com',
+        to: email,
+        subject: 'Notificación de Error',
+        text: `Se ha producido el siguiente error: ${error}`,
+      });
+
+      resolve(Service.successResponse({ message: 'Notificación de error enviada correctamente' }));
+
     } catch (e) {
       reject(Service.rejectResponse(
         e.message || 'Invalid input',
@@ -21,18 +56,49 @@ const notificacionesErrorPOST = ({ notificacionError }) => new Promise(
     }
   },
 );
+
 /**
 * Notificar presencia en sala por email
 *
+* wsKey String 
 * notificacionPresencia NotificacionPresencia 
 * no response value expected for this operation
 * */
-const notificacionesPresenciaPOST = ({ notificacionPresencia }) => new Promise(
+const notificacionesPresenciaPOST = ({ wsKey, notificacionPresencia }) => new Promise(
   async (resolve, reject) => {
     try {
-      resolve(Service.successResponse({
-        notificacionPresencia,
-      }));
+      const [keyResult] = await pool.query('SELECT * FROM restkey WHERE keyValue = ?', [wsKey]);
+      if (keyResult.length === 0) {
+        return resolve(Service.rejectResponse('WSKey inválida', 401));
+      }
+
+      const { codigoSala } = notificacionPresencia;
+
+      const [salaResult] = await pool.query('SELECT nombre FROM salas WHERE codigoSala = ?', [codigoSala]);
+      if (salaResult.length === 0) {
+        return resolve(Service.rejectResponse('Sala no encontrada', 404));
+      }
+
+      const nombreSala = salaResult[0].nombre;
+      const [empleados] = await pool.query(
+        'SELECT e.email FROM controlpresencia cp JOIN empleados e ON cp.idEmpleado = e.id JOIN salas s ON cp.idSala = s.id WHERE s.codigoSala = ?',
+        [codigoSala]
+      );
+
+      if (empleados.length === 0) {
+        return resolve(Service.rejectResponse('No hay empleados presentes en la sala', 404));
+      }
+
+      const emailList = empleados.map(emp => emp.email).join(',');
+      await transporter.sendMail({
+        from: 'noreply@empresa.com',
+        to: emailList,
+        subject: 'Notificación de Presencia en Sala',
+        text: `Se ha registrado su presencia en la sala: ${nombreSala}`,
+      });
+
+      resolve(Service.successResponse({ message: 'Notificación de presencia enviada correctamente' }));
+
     } catch (e) {
       reject(Service.rejectResponse(
         e.message || 'Invalid input',
@@ -44,15 +110,36 @@ const notificacionesPresenciaPOST = ({ notificacionPresencia }) => new Promise(
 /**
 * Notificar si un empleado es válido por email
 *
+* wsKey String 
 * notificacionUsuario NotificacionUsuario 
 * no response value expected for this operation
 * */
-const notificacionesUsuarioValidoPOST = ({ notificacionUsuario }) => new Promise(
+const notificacionesUsuarioValidoPOST = ({ wsKey, notificacionUsuario }) => new Promise(
   async (resolve, reject) => {
     try {
-      resolve(Service.successResponse({
-        notificacionUsuario,
-      }));
+      const [keyResult] = await pool.query('SELECT * FROM restkey WHERE keyValue = ?', [wsKey]);
+      if (keyResult.length === 0) {
+        return resolve(Service.rejectResponse('WSKey inválida', 401));
+      }
+
+      const { nifnie } = notificacionUsuario;
+
+      const [result] = await pool.query('SELECT email, valido FROM empleados WHERE nifnie = ?', [nifnie]);
+      if (result.length === 0) {
+        return resolve(Service.rejectResponse('Empleado no encontrado', 404));
+      }
+
+      const email = result[0].email;
+      const esValido = result[0].valido === 1 ? 'válido' : 'no válido';
+      await transporter.sendMail({
+        from: 'noreply@empresa.com',
+        to: email,
+        subject: 'Notificación de Validez de Usuario',
+        text: 'Se ha validado correctamente su usuario en el sistema.',
+      });
+
+      resolve(Service.successResponse({ message: 'Notificación de usuario válido enviada correctamente' }));
+
     } catch (e) {
       reject(Service.rejectResponse(
         e.message || 'Invalid input',

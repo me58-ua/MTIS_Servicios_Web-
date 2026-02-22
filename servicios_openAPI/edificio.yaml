@@ -454,6 +454,12 @@ paths:
       tags:
         - Notificaciones
       summary: Notificar presencia en sala por email
+      parameters:
+        - name: wsKey
+          in: query
+          required: true
+          schema:
+            type: string
       requestBody:
         required: true
         content:
@@ -475,6 +481,12 @@ paths:
       tags:
         - Notificaciones
       summary: Notificar si un empleado es válido por email
+      parameters:
+        - name: wsKey
+          in: query
+          required: true
+          schema:
+            type: string
       requestBody:
         required: true
         content:
@@ -496,6 +508,12 @@ paths:
       tags:
         - Notificaciones
       summary: Notificar un error a un empleado por email
+      parameters:
+        - name: wsKey
+          in: query
+          required: true
+          schema:
+            type: string
       requestBody:
         required: true
         content:
@@ -512,7 +530,7 @@ paths:
         '404':
           description: Empleado no encontrado
 
-        
+
 
 
 

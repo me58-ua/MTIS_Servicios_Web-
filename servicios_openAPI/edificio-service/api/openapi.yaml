@@ -460,6 +460,14 @@ paths:
   /notificaciones/presencia:
     post:
       operationId: notificacionesPresenciaPOST
+      parameters:
+      - explode: true
+        in: query
+        name: wsKey
+        required: true
+        schema:
+          type: string
+        style: form
       requestBody:
         content:
           application/json:
@@ -490,6 +498,14 @@ paths:
   /notificaciones/usuarioValido:
     post:
       operationId: notificacionesUsuarioValidoPOST
+      parameters:
+      - explode: true
+        in: query
+        name: wsKey
+        required: true
+        schema:
+          type: string
+        style: form
       requestBody:
         content:
           application/json:
@@ -520,6 +536,14 @@ paths:
   /notificaciones/error:
     post:
       operationId: notificacionesErrorPOST
+      parameters:
+      - explode: true
+        in: query
+        name: wsKey
+        required: true
+        schema:
+          type: string
+        style: form
       requestBody:
         content:
           application/json:
