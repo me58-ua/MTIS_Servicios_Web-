@@ -16,8 +16,8 @@ const salasCodigoSalaGET = async (request, response) => {
   await Controller.handleRequest(request, response, service.salasCodigoSalaGET);
 };
 
-const salasCodigoSalaPUT = async (request, response) => {
-  await Controller.handleRequest(request, response, service.salasCodigoSalaPUT);
+const salasIdPUT = async (request, response) => {
+  await Controller.handleRequest(request, response, service.salasIdPUT);
 };
 
 const salasPOST = async (request, response) => {
@@ -28,6 +28,6 @@ const salasPOST = async (request, response) => {
 module.exports = {
   salasCodigoSalaDELETE,
   salasCodigoSalaGET,
-  salasCodigoSalaPUT,
+  salasIdPUT,
   salasPOST,
 };

@@ -100,12 +100,13 @@ paths:
       tags:
       - Salas
       x-eov-operation-handler: controllers/SalasController
+  /salas/{id}:
     put:
-      operationId: salasCodigoSalaPUT
+      operationId: salasIdPUT
       parameters:
       - explode: false
         in: path
-        name: codigoSala
+        name: id
         required: true
         schema:
           type: integer
