@@ -1,0 +1,692 @@
+openapi: 3.0.3
+info:
+  description: "API REST para la gestion de salas, niveles, Dispositivos y Notificaciones\
+    \ del Edificio"
+  title: Edificio DTIC
+  version: 1.0.0
+servers:
+- url: http://localhost:8080/v1
+tags:
+- description: Operaciones sobre las Salas
+  name: Salas
+- description: Operaciones sobre los niveles
+  name: Niveles
+- description: Operaciones sobre los dispositivos
+  name: Dispositivos
+- description: Operaciones sobre las notificaciones
+  name: Notificaciones
+paths:
+  /salas:
+    post:
+      operationId: salasPOST
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Sala"
+        required: true
+      responses:
+        "201":
+          description: Sala creada correctamente
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_salas_post_400_response"
+          description: peticion invalida
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_salas_post_400_response"
+          description: WSKey invalida
+      summary: Crear nueva sala
+      tags:
+      - Salas
+      x-eov-operation-handler: controllers/SalasController
+  /salas/{codigoSala}:
+    delete:
+      operationId: salasCodigoSalaDELETE
+      parameters:
+      - explode: false
+        in: path
+        name: codigoSala
+        required: true
+        schema:
+          type: integer
+        style: simple
+      - explode: true
+        in: query
+        name: wsKey
+        required: true
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          description: Sala eliminada correctamente
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_salas_post_400_response"
+          description: peticion invalida
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_salas_post_400_response"
+          description: WSKey invalida
+        "404":
+          description: Sala no encontrada
+      summary: Borrar sala por su codigo
+      tags:
+      - Salas
+      x-eov-operation-handler: controllers/SalasController
+    get:
+      operationId: salasCodigoSalaGET
+      parameters:
+      - explode: false
+        in: path
+        name: codigoSala
+        required: true
+        schema:
+          type: integer
+        style: simple
+      - explode: true
+        in: query
+        name: wsKey
+        required: true
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Sala"
+          description: Sala encontrada
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_salas_post_400_response"
+          description: peticion invalida
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_salas_post_400_response"
+          description: WSKey invalida
+        "404":
+          description: Sala no encontrada
+      summary: Consultar sala pr codigo
+      tags:
+      - Salas
+      x-eov-operation-handler: controllers/SalasController
+  /salas/{id}:
+    put:
+      operationId: salasIdPUT
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Sala"
+        required: true
+      responses:
+        "200":
+          description: Sala actualizada correctamente
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_salas_post_400_response"
+          description: peticion invalida
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_salas_post_400_response"
+          description: WSKey invalida
+        "404":
+          description: Sala no encontrada
+      summary: Modificar datos de Sala
+      tags:
+      - Salas
+      x-eov-operation-handler: controllers/SalasController
+  /nivel:
+    post:
+      operationId: nivelPOST
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Nivel"
+        required: true
+      responses:
+        "201":
+          description: Nivel creado correctamente
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_salas_post_400_response"
+          description: peticion invalida
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_salas_post_400_response"
+          description: WSKey invalida
+      summary: Crear nuevo nivel
+      tags:
+      - Niveles
+      x-eov-operation-handler: controllers/NivelesController
+  /nivel/{nivel}:
+    delete:
+      operationId: nivelNivelDELETE
+      parameters:
+      - explode: false
+        in: path
+        name: nivel
+        required: true
+        schema:
+          type: integer
+        style: simple
+      - explode: true
+        in: query
+        name: wsKey
+        required: true
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          description: Nivel eliminado correctamente
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_salas_post_400_response"
+          description: peticion invalida
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_salas_post_400_response"
+          description: WSKey invalida
+        "404":
+          description: Nivel no encontrado
+      summary: Borrar nivel por su nivel
+      tags:
+      - Niveles
+      x-eov-operation-handler: controllers/NivelesController
+    get:
+      operationId: nivelNivelGET
+      parameters:
+      - explode: false
+        in: path
+        name: nivel
+        required: true
+        schema:
+          type: integer
+        style: simple
+      - explode: true
+        in: query
+        name: wsKey
+        required: true
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Nivel"
+          description: Nivel encontrado
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_salas_post_400_response"
+          description: peticion invalida
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_salas_post_400_response"
+          description: WSKey invalida
+        "404":
+          description: Nivel no encontrado
+      summary: Consultar nivel por su nivel
+      tags:
+      - Niveles
+      x-eov-operation-handler: controllers/NivelesController
+  /nivel/{id}:
+    put:
+      operationId: nivelIdPUT
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Nivel"
+        required: true
+      responses:
+        "200":
+          description: Nivel actualizado correctamente
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_salas_post_400_response"
+          description: peticion invalida
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_salas_post_400_response"
+          description: WSKey invalida
+        "404":
+          description: Nivel no encontrado
+      summary: Modificar nivel completo por su id
+      tags:
+      - Niveles
+      x-eov-operation-handler: controllers/NivelesController
+  /dispositivo:
+    post:
+      operationId: dispositivoPOST
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Dispositivo"
+        required: true
+      responses:
+        "201":
+          description: dispositivo creado correctamente
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_salas_post_400_response"
+          description: peticion invalida
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_salas_post_400_response"
+          description: WSKey invalida
+      summary: Crear nuevo dispositivo
+      tags:
+      - Dispositivos
+      x-eov-operation-handler: controllers/DispositivosController
+  /dispositivo/{codigo}:
+    delete:
+      operationId: dispositivoCodigoDELETE
+      parameters:
+      - explode: false
+        in: path
+        name: codigo
+        required: true
+        schema:
+          type: integer
+        style: simple
+      - explode: true
+        in: query
+        name: wsKey
+        required: true
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          description: Dispositivo eliminado correctamente
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_salas_post_400_response"
+          description: peticion invalida
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_salas_post_400_response"
+          description: WSKey invalida
+        "404":
+          description: Dispositivo no encontrado
+      summary: Borrar dispositivo por su código
+      tags:
+      - Dispositivos
+      x-eov-operation-handler: controllers/DispositivosController
+    get:
+      operationId: dispositivoCodigoGET
+      parameters:
+      - explode: false
+        in: path
+        name: codigo
+        required: true
+        schema:
+          type: integer
+        style: simple
+      - explode: true
+        in: query
+        name: wsKey
+        required: true
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Dispositivo"
+          description: Dispositivo encontrado
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_salas_post_400_response"
+          description: peticion invalida
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_salas_post_400_response"
+          description: WSKey invalida
+        "404":
+          description: Dispositivo no encontrado
+      summary: Consultar dispositivo por su codigo
+      tags:
+      - Dispositivos
+      x-eov-operation-handler: controllers/DispositivosController
+  /dispositivo/{id}:
+    put:
+      operationId: dispositivoIdPUT
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Dispositivo"
+        required: true
+      responses:
+        "200":
+          description: Dispositivo actualizado correctamente
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_salas_post_400_response"
+          description: peticion invalida
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_salas_post_400_response"
+          description: WSKey invalida
+        "404":
+          description: Dispositivo no encontrado
+      summary: Modificar dispositivo por id
+      tags:
+      - Dispositivos
+      x-eov-operation-handler: controllers/DispositivosController
+  /notificaciones/presencia:
+    post:
+      operationId: notificacionesPresenciaPOST
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NotificacionPresencia"
+        required: true
+      responses:
+        "200":
+          description: Notificación enviada correctamente
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_salas_post_400_response"
+          description: peticion invalida
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_salas_post_400_response"
+          description: WSKey invalida
+        "404":
+          description: Sala o empleados no encontrados
+      summary: Notificar presencia en sala por email
+      tags:
+      - Notificaciones
+      x-eov-operation-handler: controllers/NotificacionesController
+  /notificaciones/usuarioValido:
+    post:
+      operationId: notificacionesUsuarioValidoPOST
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NotificacionUsuario"
+        required: true
+      responses:
+        "200":
+          description: Notificación enviada correctamente
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_salas_post_400_response"
+          description: peticion invalida
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_salas_post_400_response"
+          description: WSKey invalida
+        "404":
+          description: Empleado no encontrado
+      summary: Notificar si un empleado es válido por email
+      tags:
+      - Notificaciones
+      x-eov-operation-handler: controllers/NotificacionesController
+  /notificaciones/error:
+    post:
+      operationId: notificacionesErrorPOST
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NotificacionError"
+        required: true
+      responses:
+        "200":
+          description: Notificación de error enviada correctamente
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_salas_post_400_response"
+          description: peticion invalida
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_salas_post_400_response"
+          description: WSKey invalida
+        "404":
+          description: Empleado no encontrado
+      summary: Notificar un error a un empleado por email
+      tags:
+      - Notificaciones
+      x-eov-operation-handler: controllers/NotificacionesController
+components:
+  responses:
+    "400Error":
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/_salas_post_400_response"
+      description: peticion invalida
+    "401Error":
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/_salas_post_400_response"
+      description: WSKey invalida
+    "404Error":
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/_salas_post_400_response"
+      description: Recurso no encontrado
+  schemas:
+    Sala:
+      example:
+        codigoSala: 6
+        wsKey: wsKey
+        id: 0
+        nombre: nombre
+        nivel: 1
+      properties:
+        id:
+          description: ID de la sala
+          readOnly: true
+          type: integer
+        codigoSala:
+          description: código de la sala
+          type: integer
+        nombre:
+          description: nombre de la sala
+          type: string
+        nivel:
+          description: nivel de la sala
+          type: integer
+        wsKey:
+          description: Clave de autenticacion REST
+          type: string
+      required:
+      - codigoSala
+      - nivel
+      - nombre
+      type: object
+    Nivel:
+      example:
+        descripcion: descripcion
+        wsKey: wsKey
+        id: 0
+        nivel: 6
+      properties:
+        id:
+          readOnly: true
+          type: integer
+        nivel:
+          type: integer
+        descripcion:
+          maxLength: 200
+          type: string
+        wsKey:
+          type: string
+      required:
+      - descripcion
+      - nivel
+      type: object
+    Dispositivo:
+      example:
+        descripcion: descripcion
+        wsKey: wsKey
+        codigo: 6
+        id: 0
+      properties:
+        id:
+          readOnly: true
+          type: integer
+        codigo:
+          type: integer
+        descripcion:
+          maxLength: 200
+          type: string
+        wsKey:
+          type: string
+      required:
+      - codigo
+      type: object
+    NotificacionPresencia:
+      example:
+        codigoSala: 0
+        wsKey: wsKey
+      properties:
+        codigoSala:
+          type: integer
+        wsKey:
+          type: string
+      required:
+      - codigoSala
+      - wsKey
+      type: object
+    NotificacionUsuario:
+      example:
+        wsKey: wsKey
+        nifnie: nifnie
+      properties:
+        nifnie:
+          maxLength: 9
+          type: string
+        wsKey:
+          type: string
+      required:
+      - nifnie
+      - wsKey
+      type: object
+    NotificacionError:
+      example:
+        wsKey: wsKey
+        nifnie: nifnie
+        error: error
+      properties:
+        nifnie:
+          maxLength: 9
+          type: string
+        error:
+          type: string
+        wsKey:
+          type: string
+      required:
+      - error
+      - nifnie
+      - wsKey
+      type: object
+    _salas_post_400_response:
+      example:
+        message: message
+      properties:
+        message:
+          type: string
+      type: object

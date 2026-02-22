@@ -1,0 +1,518 @@
+openapi: '3.0.3'
+info:
+  title: Edificio DTIC
+  description: API REST para la gestion de salas, niveles, Dispositivos y Notificaciones del Edificio
+  version: '1.0.0'
+servers:
+  - url: http://localhost:8080/v1
+tags:
+  - name: Salas
+    description: Operaciones sobre las Salas
+  - name: Niveles
+    description: Operaciones sobre los niveles
+  - name: Dispositivos
+    description: Operaciones sobre los dispositivos
+  - name: Notificaciones
+    description: Operaciones sobre las notificaciones
+
+components:
+  schemas:
+    Sala:
+      type: object
+      required: 
+      - codigoSala
+      - nombre
+      - nivel
+      properties:
+        id:
+          type: integer
+          description: ID de la sala
+          readOnly: true
+        codigoSala:
+          type: integer
+          description: código de la sala
+        nombre:
+          type: string
+          description: nombre de la sala
+        nivel:
+          type: integer
+          description: nivel de la sala
+        wsKey:
+          type: string
+          description: Clave de autenticacion REST
+
+    Nivel: 
+      type: object
+      required:
+        - nivel
+        - descripcion
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        nivel:
+          type: integer
+        descripcion:
+          type: string
+          maxLength: 200
+        wsKey:
+          type: string
+
+    Dispositivo:
+      type: object
+      required:
+        - codigo
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        codigo:
+          type: integer
+        descripcion:
+          type: string
+          maxLength: 200
+        wsKey:
+          type: string
+
+    NotificacionPresencia:
+      type: object
+      required:
+        - codigoSala
+        - wsKey
+      properties:
+        codigoSala:
+          type: integer
+        wsKey:
+          type: string
+
+    NotificacionUsuario:
+      type: object
+      required:
+        - nifnie 
+        - wsKey
+      properties:
+        nifnie:
+          type: string
+          maxLength: 9
+        wsKey:
+          type: string
+    
+    NotificacionError:
+      type: object
+      required:
+        - nifnie
+        - error
+        - wsKey
+      properties:
+        nifnie:
+          type: string
+          maxLength: 9
+        error:
+          type: string
+        wsKey:
+          type: string
+
+  responses:
+    400Error:
+      description: peticion invalida
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+    401Error:
+      description: WSKey invalida
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+    404Error:
+      description: Recurso no encontrado
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+
+paths:
+  # salas
+  /salas:
+    post: 
+      tags: 
+        - Salas
+      summary: Crear nueva sala
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Sala'
+      responses:
+        '201':
+          description: Sala creada correctamente
+        '400':
+          $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
+
+  /salas/{codigoSala}:
+    get:
+      tags:
+        - Salas
+      summary: Consultar sala pr codigo
+      parameters:
+        - name: codigoSala
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: wsKey
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Sala encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sala'
+        '400':
+          $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
+        '404':
+          description: Sala no encontrada
+          
+    delete:
+      tags:
+        - Salas
+      summary: Borrar sala por su codigo
+      parameters:
+        - name: codigoSala
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: wsKey
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Sala eliminada correctamente
+        '400':
+          $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
+        '404':
+          description: Sala no encontrada
+
+  /salas/{id}:
+    put:
+      tags:
+        - Salas
+      summary: Modificar datos de Sala
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Sala'
+      responses:
+        '200':
+          description: Sala actualizada correctamente
+        '400':
+          $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
+        '404':
+          description: Sala no encontrada
+
+  # niveles
+  /nivel:
+    post: 
+      tags:
+        - Niveles
+      summary: Crear nuevo nivel
+      requestBody:
+        required : true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Nivel'
+      responses:
+        '201':
+          description: Nivel creado correctamente
+        '400':
+          $ref: "#/components/responses/400Error"
+        '401':
+          $ref: '#/components/responses/401Error'
+
+  /nivel/{nivel}:
+    get:
+      tags:
+        - Niveles
+      summary: Consultar nivel por su nivel
+      parameters:
+        - name: nivel
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: wsKey
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Nivel encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Nivel'
+        '400':
+          $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
+        '404':
+          description: Nivel no encontrado
+    
+    delete:
+      tags:
+        - Niveles
+      summary: Borrar nivel por su nivel
+      parameters:
+        - name: nivel
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: wsKey
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Nivel eliminado correctamente
+        '400':
+          $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
+        '404':
+          description: Nivel no encontrado
+
+  /nivel/{id}:
+    put:
+      tags:
+        - Niveles
+      summary: Modificar nivel completo por su id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Nivel'
+      responses:
+        '200':
+          description: Nivel actualizado correctamente
+        '400':
+          $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
+        '404':
+          description: Nivel no encontrado
+
+  # Dispositivos
+  /dispositivo:
+    post:
+      tags:
+        - Dispositivos
+      summary: Crear nuevo dispositivo
+      requestBody:
+        required : true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Dispositivo'
+      responses:
+        '201':
+          description: dispositivo creado correctamente
+        '400':
+          $ref: "#/components/responses/400Error"
+        '401':
+          $ref: '#/components/responses/401Error'
+
+  /dispositivo/{codigo}:
+    get:
+      tags:
+        - Dispositivos
+      summary: Consultar dispositivo por su codigo
+      parameters:
+        - name: codigo
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: wsKey
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Dispositivo encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dispositivo'
+        '400':
+          $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
+        '404':
+          description: Dispositivo no encontrado
+
+    delete:
+      tags:
+        - Dispositivos
+      summary: Borrar dispositivo por su código
+      parameters:
+        - name: codigo
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: wsKey
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Dispositivo eliminado correctamente
+        '400':
+          $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
+        '404':
+          description: Dispositivo no encontrado
+
+  /dispositivo/{id}:
+    put:
+      tags:
+        - Dispositivos
+      summary: Modificar dispositivo por id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Dispositivo'
+      responses:
+        '200':
+          description: Dispositivo actualizado correctamente
+        '400':
+          $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
+        '404':
+          description: Dispositivo no encontrado
+
+  # notificaciones
+  /notificaciones/presencia:
+    post:
+      tags:
+        - Notificaciones
+      summary: Notificar presencia en sala por email
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NotificacionPresencia'
+      responses:
+        '200':
+          description: Notificación enviada correctamente
+        '400':
+          $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
+        '404':
+          description: Sala o empleados no encontrados
+
+  /notificaciones/usuarioValido:
+    post:
+      tags:
+        - Notificaciones
+      summary: Notificar si un empleado es válido por email
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NotificacionUsuario'
+      responses:
+        '200':
+          description: Notificación enviada correctamente
+        '400':
+          $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
+        '404':
+          description: Empleado no encontrado
+
+  /notificaciones/error:
+    post:
+      tags:
+        - Notificaciones
+      summary: Notificar un error a un empleado por email
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NotificacionError'
+      responses:
+        '200':
+          description: Notificación de error enviada correctamente
+        '400':
+          $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
+        '404':
+          description: Empleado no encontrado
+
+        
+
+
+

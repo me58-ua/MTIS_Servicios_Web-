@@ -1,7 +1,7 @@
 {
-  "name":  "salas-dtic",
+  "name":  "edificio-dtic",
   "version": "1.0.0",
-  "description": "API REST para las Salas",
+  "description": "API REST para la gestion de salas, niveles, Dispositivos y Notificaciones del Edificio",
   "main": "index.js",
   "scripts": {
     "prestart": "npm install",
