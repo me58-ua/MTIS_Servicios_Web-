@@ -1,5 +1,13 @@
 /* eslint-disable no-unused-vars */
 const Service = require('./Service');
+const mysql = require('mysql2/promise');
+
+const pool = mysql.createPool({
+  host: 'localhost',
+  user: 'root',
+  password: 'root',
+  database: 'practica1'
+});
 
 /**
 * Modificar nivel completo por su id
@@ -11,10 +19,23 @@ const Service = require('./Service');
 const nivelIdPUT = ({ id, nivel }) => new Promise(
   async (resolve, reject) => {
     try {
-      resolve(Service.successResponse({
-        id,
-        nivel,
-      }));
+      const { nivel: nivelValue, descripcion, wsKey } = nivel;
+
+      const [keys] = await pool.query('SELECT * FROM restkey WHERE rest_key = ?', [wsKey]);
+      if (keys.length === 0) {
+        return resolve(Service.rejectResponse('WSKey invalida', 401));
+      }
+
+      const [result] = await pool.query(
+        'UPDATE niveles SET nivel = ?, descripcion = ? WHERE id = ?',
+        [nivelValue, descripcion, id]
+      );
+      if (result.affectedRows === 0) {
+        return resolve(Service.rejectResponse('Nivel no encontrado', 404));
+      }
+
+      resolve(Service.successResponse({ message: 'Nivel actualizado correctamente' }));
+
     } catch (e) {
       reject(Service.rejectResponse(
         e.message || 'Invalid input',
@@ -23,6 +44,7 @@ const nivelIdPUT = ({ id, nivel }) => new Promise(
     }
   },
 );
+
 /**
 * Borrar nivel por su nivel
 *
@@ -33,10 +55,18 @@ const nivelIdPUT = ({ id, nivel }) => new Promise(
 const nivelNivelDELETE = ({ nivel, wsKey }) => new Promise(
   async (resolve, reject) => {
     try {
-      resolve(Service.successResponse({
-        nivel,
-        wsKey,
-      }));
+      const [keys] = await pool.query('SELECT * FROM restkey WHERE rest_key = ?', [wsKey]);
+      if (keys.length === 0) {
+        return resolve(Service.rejectResponse('WSKey invalida', 401));
+      }
+
+      const [result] = await pool.query('DELETE FROM niveles WHERE nivel = ?', [nivel]);
+      if (result.affectedRows === 0) {
+        return resolve(Service.rejectResponse('Nivel no encontrado', 404));
+      }
+
+      resolve(Service.successResponse({ message: 'Nivel eliminado correctamente' }));
+
     } catch (e) {
       reject(Service.rejectResponse(
         e.message || 'Invalid input',
@@ -45,6 +75,7 @@ const nivelNivelDELETE = ({ nivel, wsKey }) => new Promise(
     }
   },
 );
+
 /**
 * Consultar nivel por su nivel
 *
@@ -55,10 +86,18 @@ const nivelNivelDELETE = ({ nivel, wsKey }) => new Promise(
 const nivelNivelGET = ({ nivel, wsKey }) => new Promise(
   async (resolve, reject) => {
     try {
-      resolve(Service.successResponse({
-        nivel,
-        wsKey,
-      }));
+      const [keys] = await pool.query('SELECT * FROM restkey WHERE rest_key = ?', [wsKey]);
+      if (keys.length === 0) {
+        return resolve(Service.rejectResponse('WSKey invalida', 401));
+      }
+
+      const [result] = await pool.query('SELECT * FROM niveles WHERE nivel = ?', [nivel]);
+      if (result.length === 0) {
+        return resolve(Service.rejectResponse('Nivel no encontrado', 404));
+      }
+
+      resolve(Service.successResponse(result[0]));
+
     } catch (e) {
       reject(Service.rejectResponse(
         e.message || 'Invalid input',
@@ -67,6 +106,7 @@ const nivelNivelGET = ({ nivel, wsKey }) => new Promise(
     }
   },
 );
+
 /**
 * Crear nuevo nivel
 *
@@ -76,9 +116,20 @@ const nivelNivelGET = ({ nivel, wsKey }) => new Promise(
 const nivelPOST = ({ nivel }) => new Promise(
   async (resolve, reject) => {
     try {
-      resolve(Service.successResponse({
-        nivel,
-      }));
+      const { nivel: nivelValue, descripcion, wsKey } = nivel;
+
+      const [keys] = await pool.query('SELECT * FROM restkey WHERE rest_key = ?', [wsKey]);
+      if (keys.length === 0) {
+        return resolve(Service.rejectResponse('WSKey invalida', 401));
+      }
+
+      await pool.query(
+        'INSERT INTO niveles (nivel, descripcion) VALUES (?, ?)',
+        [nivelValue, descripcion]
+      );
+
+      resolve(Service.successResponse({ message: 'Nivel creado correctamente' }, 201));
+
     } catch (e) {
       reject(Service.rejectResponse(
         e.message || 'Invalid input',
