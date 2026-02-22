@@ -26,7 +26,7 @@ const transporter = nodemailer.createTransport({
 const notificacionesErrorPOST = ({ wsKey, notificacionError }) => new Promise(
   async (resolve, reject) => {
     try {
-      const [keyResult] = await pool.query('SELECT * FROM restkey WHERE keyValue = ?', [wsKey]);
+      const [keyResult] = await pool.query('SELECT * FROM restkey WHERE rest_key = ?', [wsKey]);
       if (keyResult.length === 0) {
         return resolve(Service.rejectResponse('WSKey inválida', 401));
       }
@@ -67,7 +67,7 @@ const notificacionesErrorPOST = ({ wsKey, notificacionError }) => new Promise(
 const notificacionesPresenciaPOST = ({ wsKey, notificacionPresencia }) => new Promise(
   async (resolve, reject) => {
     try {
-      const [keyResult] = await pool.query('SELECT * FROM restkey WHERE keyValue = ?', [wsKey]);
+      const [keyResult] = await pool.query('SELECT * FROM restkey WHERE rest_key = ?', [wsKey]);
       if (keyResult.length === 0) {
         return resolve(Service.rejectResponse('WSKey inválida', 401));
       }
@@ -117,9 +117,9 @@ const notificacionesPresenciaPOST = ({ wsKey, notificacionPresencia }) => new Pr
 const notificacionesUsuarioValidoPOST = ({ wsKey, notificacionUsuario }) => new Promise(
   async (resolve, reject) => {
     try {
-      const [keyResult] = await pool.query('SELECT * FROM restkey WHERE keyValue = ?', [wsKey]);
+      const [keyResult] = await pool.query('SELECT * FROM restkey WHERE rest_key = ?', [wsKey]);
       if (keyResult.length === 0) {
-        return resolve(Service.rejectResponse('WSKey inválida', 401));
+        return resolve(Service.rejectResponse('WSKey invalida', 401));
       }
 
       const { nifnie } = notificacionUsuario;
@@ -134,8 +134,8 @@ const notificacionesUsuarioValidoPOST = ({ wsKey, notificacionUsuario }) => new 
       await transporter.sendMail({
         from: 'noreply@empresa.com',
         to: email,
-        subject: 'Notificación de Validez de Usuario',
-        text: 'Se ha validado correctamente su usuario en el sistema.',
+        subject: 'Notificación de Validez del Usuario',
+        text: 'Su usuario con NIF/NIE ${nifnie} es ${esValido} en el sistema.',
       });
 
       resolve(Service.successResponse({ message: 'Notificación de usuario válido enviada correctamente' }));
