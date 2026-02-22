@@ -1,0 +1,140 @@
+openapi: '3.0.3'
+info:
+  title: Salas DTIC
+  description: API REST para las Salas
+  version: '1.0.0'
+servers:
+  - url: http://localhost:8080/v1
+tags:
+  - name: Salas
+    description: Operaciones sobre las Salas
+
+components:
+  schemas:
+    Sala:
+      type: object
+      required: 
+      - codigoSala
+      - nombre
+      - nivel
+      properties:
+        id:
+          type: integer
+          description: ID de la sala
+          readOnly: true
+        codigoSala:
+          type: integer
+          description: codigo de la sala
+        nombre:
+          type: string
+          description: nombre de la sala
+        nivel:
+          type: integer
+          description: nivel de la sala
+        wskey:
+          type: string
+          description: Clave de autenticacion REST
+  
+  responses:
+    400Error:
+      description: peticion invalida
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+
+paths:
+  /salas:
+    post: 
+      tags: 
+        - Salas
+      summary: Crear nueva sala
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Sala'
+      responses:
+        '201':
+          description: Sala creada correctamente
+        '400':
+          $ref: '#/components/responses/400Error'
+
+  /salas/{codigoSala}:
+    get:
+      tags:
+        - Salas
+      summary: Consultar sala pr codigo
+      parameters:
+        - name: codigoSala
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: wskey
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Sala encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sala'
+        '400':
+          $ref: '#/components/responses/400Error'
+        '404':
+          description: Sala no encontrada
+          
+    put:
+      tags:
+        - Salas
+      summary: Modificar datos de Sala
+      parameters:
+        - name: codigoSala
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Sala'
+      responses:
+        '200':
+          description: Sala actualizada correctamente
+        '400':
+          $ref: '#/components/responses/400Error'
+        '404':
+          description: Sala no encontrada
+
+    delete:
+      tags:
+        - Salas
+      summary: Borrar sala por su codigo
+      parameters:
+        - name: codigoSala
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: wsKey
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Sala eliminada correctamente
+        '400':
+          $ref: '#/components/responses/400Error'
+        '404':
+          description: Sala no encontrada
