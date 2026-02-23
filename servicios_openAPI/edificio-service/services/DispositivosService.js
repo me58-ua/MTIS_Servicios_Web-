@@ -105,13 +105,13 @@ const dispositivoCodigoPUT = ({ codigo, body }) => new Promise(
 /**
 * Crear nuevo dispositivo
 *
-* dispositivo Dispositivo 
+* body Dispositivo 
 * no response value expected for this operation
 * */
-const dispositivoPOST = ({ dispositivo }) => new Promise(
+const dispositivoPOST = ({ body }) => new Promise(
   async (resolve, reject) => {
     try {
-      const { codigo, descripcion, wsKey } = dispositivo;
+      const { codigo, descripcion, wsKey } = body;
 
       const [keys] = await pool.query('SELECT * FROM restkey WHERE rest_key = ?', [wsKey]);
       if (keys.length === 0) {

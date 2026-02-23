@@ -108,10 +108,10 @@ const nivelNivelPUT = ({ nivel, body }) => new Promise(
 * nivel Nivel 
 * no response value expected for this operation
 * */
-const nivelPOST = ({ nivel }) => new Promise(
+const nivelPOST = ({ body }) => new Promise(
   async (resolve, reject) => {
     try {
-      const { nivel, descripcion, wsKey } = nivel;
+      const { nivel, descripcion, wsKey } = body;
 
       const [keys] = await pool.query('SELECT * FROM restkey WHERE rest_key = ?', [wsKey]);
       if (keys.length === 0) {

@@ -1,5 +1,5 @@
 {
-  "name":  "edificio-dtic",
+  "name": "edificio-dtic",
   "version": "1.0.0",
   "description": "API REST para la gestion de salas, niveles, Dispositivos y Notificaciones del Edificio",
   "main": "index.js",
@@ -21,6 +21,8 @@
     "express": "^4.16.4",
     "express-openapi-validator": "^4.13.8",
     "js-yaml": "^3.3.0",
+    "mysql2": "^3.18.0",
+    "nodemailer": "^8.0.1",
     "ono": "^5.0.1",
     "openapi-sampler": "^1.0.0-beta.15",
     "swagger-ui-express": "^4.0.2",
