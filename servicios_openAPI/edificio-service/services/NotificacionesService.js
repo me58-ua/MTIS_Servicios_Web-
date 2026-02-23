@@ -24,7 +24,7 @@ const transporter = nodemailer.createTransport({
 * notificacionError NotificacionError 
 * no response value expected for this operation
 * */
-const notificacionesErrorPOST = ({ wsKey, notificacionError }) => new Promise(
+const notificacionesErrorPOST = ({ wsKey, body }) => new Promise(
   async (resolve, reject) => {
     try {
       const [keyResult] = await pool.query('SELECT * FROM restkey WHERE rest_key = ?', [wsKey]);
@@ -32,7 +32,7 @@ const notificacionesErrorPOST = ({ wsKey, notificacionError }) => new Promise(
         return resolve(Service.rejectResponse('WSKey inválida', 401));
       }
 
-      const { nifnie, error } = notificacionError;
+      const { nifnie, error } = body;
 
       const [result] = await pool.query('SELECT email FROM empleados WHERE nifnie = ?', [nifnie]);
       if (result.length === 0) {
@@ -62,10 +62,10 @@ const notificacionesErrorPOST = ({ wsKey, notificacionError }) => new Promise(
 * Notificar presencia en sala por email
 *
 * wsKey String 
-* notificacionPresencia NotificacionPresencia 
+* nody NotificacionPresencia 
 * no response value expected for this operation
 * */
-const notificacionesPresenciaPOST = ({ wsKey, notificacionPresencia }) => new Promise(
+const notificacionesPresenciaPOST = ({ wsKey, body }) => new Promise(
   async (resolve, reject) => {
     try {
       const [keyResult] = await pool.query('SELECT * FROM restkey WHERE rest_key = ?', [wsKey]);
@@ -73,7 +73,7 @@ const notificacionesPresenciaPOST = ({ wsKey, notificacionPresencia }) => new Pr
         return resolve(Service.rejectResponse('WSKey inválida', 401));
       }
 
-      const { codigoSala } = notificacionPresencia;
+      const { codigoSala } = body;
 
       const [salaResult] = await pool.query('SELECT nombre FROM salas WHERE codigoSala = ?', [codigoSala]);
       if (salaResult.length === 0) {
@@ -112,10 +112,10 @@ const notificacionesPresenciaPOST = ({ wsKey, notificacionPresencia }) => new Pr
 * Notificar si un empleado es válido por email
 *
 * wsKey String 
-* notificacionUsuario NotificacionUsuario 
+* body NotificacionUsuario 
 * no response value expected for this operation
 * */
-const notificacionesUsuarioValidoPOST = ({ wsKey, notificacionUsuario }) => new Promise(
+const notificacionesUsuarioValidoPOST = ({ wsKey, body }) => new Promise(
   async (resolve, reject) => {
     try {
       const [keyResult] = await pool.query('SELECT * FROM restkey WHERE rest_key = ?', [wsKey]);
@@ -123,7 +123,7 @@ const notificacionesUsuarioValidoPOST = ({ wsKey, notificacionUsuario }) => new 
         return resolve(Service.rejectResponse('WSKey invalida', 401));
       }
 
-      const { nifnie } = notificacionUsuario;
+      const { nifnie } = body;
 
       const [result] = await pool.query('SELECT email, valido FROM empleados WHERE nifnie = ?', [nifnie]);
       if (result.length === 0) {
@@ -136,7 +136,7 @@ const notificacionesUsuarioValidoPOST = ({ wsKey, notificacionUsuario }) => new 
         from: 'noreply@empresa.com',
         to: email,
         subject: 'Notificación de Validez del Usuario',
-        text: 'Su usuario con NIF/NIE ${nifnie} es ${esValido} en el sistema.',
+        text: `Su usuario con NIF/NIE ${nifnie} es ${esValido} en el sistema.`,
       });
 
       resolve(Service.successResponse({ message: 'Notificación de usuario válido enviada correctamente' }));
