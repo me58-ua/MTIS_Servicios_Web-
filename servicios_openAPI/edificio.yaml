@@ -156,7 +156,7 @@ paths:
             schema:
               $ref: '#/components/schemas/Sala'
       responses:
-        '201':
+        '200':
           description: Sala creada correctamente
         '400':
           $ref: '#/components/responses/400Error'
@@ -259,7 +259,7 @@ paths:
             schema:
               $ref: '#/components/schemas/Nivel'
       responses:
-        '201':
+        '200':
           description: Nivel creado correctamente
         '400':
           $ref: "#/components/responses/400Error"
@@ -321,13 +321,12 @@ paths:
         '404':
           description: Nivel no encontrado
 
-  /nivel/{id}:
     put:
       tags:
         - Niveles
-      summary: Modificar nivel completo por su id
+      summary: Modificar nivel completo
       parameters:
-        - name: id
+        - name: nivel
           in: path
           required: true
           schema:
@@ -363,7 +362,7 @@ paths:
             schema:
               $ref: '#/components/schemas/Dispositivo'
       responses:
-        '201':
+        '200':
           description: dispositivo creado correctamente
         '400':
           $ref: "#/components/responses/400Error"
@@ -425,13 +424,12 @@ paths:
         '404':
           description: Dispositivo no encontrado
 
-  /dispositivo/{id}:
     put:
       tags:
         - Dispositivos
-      summary: Modificar dispositivo por id
+      summary: Modificar dispositivo
       parameters:
-        - name: id
+        - name: codigo
           in: path
           required: true
           schema:

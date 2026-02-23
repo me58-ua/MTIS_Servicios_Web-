@@ -16,8 +16,8 @@ const dispositivoCodigoGET = async (request, response) => {
   await Controller.handleRequest(request, response, service.dispositivoCodigoGET);
 };
 
-const dispositivoIdPUT = async (request, response) => {
-  await Controller.handleRequest(request, response, service.dispositivoIdPUT);
+const dispositivoCodigoPUT = async (request, response) => {
+  await Controller.handleRequest(request, response, service.dispositivoCodigoPUT);
 };
 
 const dispositivoPOST = async (request, response) => {
@@ -28,6 +28,6 @@ const dispositivoPOST = async (request, response) => {
 module.exports = {
   dispositivoCodigoDELETE,
   dispositivoCodigoGET,
-  dispositivoIdPUT,
+  dispositivoCodigoPUT,
   dispositivoPOST,
 };

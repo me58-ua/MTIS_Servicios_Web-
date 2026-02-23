@@ -8,10 +8,6 @@
 
 const Controller = require('./Controller');
 const service = require('../services/NivelesService');
-const nivelIdPUT = async (request, response) => {
-  await Controller.handleRequest(request, response, service.nivelIdPUT);
-};
-
 const nivelNivelDELETE = async (request, response) => {
   await Controller.handleRequest(request, response, service.nivelNivelDELETE);
 };
@@ -20,14 +16,18 @@ const nivelNivelGET = async (request, response) => {
   await Controller.handleRequest(request, response, service.nivelNivelGET);
 };
 
+const nivelNivelPUT = async (request, response) => {
+  await Controller.handleRequest(request, response, service.nivelNivelPUT);
+};
+
 const nivelPOST = async (request, response) => {
   await Controller.handleRequest(request, response, service.nivelPOST);
 };
 
 
 module.exports = {
-  nivelIdPUT,
   nivelNivelDELETE,
   nivelNivelGET,
+  nivelNivelPUT,
   nivelPOST,
 };

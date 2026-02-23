@@ -4,6 +4,7 @@ const mysql = require('mysql2/promise');
 
 const pool = mysql.createPool({
   host: 'localhost',
+  port: 3307,
   user: 'root',
   password: 'root',
   database: 'practica1'
@@ -30,7 +31,6 @@ const dispositivoCodigoDELETE = ({ codigo, wsKey }) => new Promise(
       }
 
       resolve(Service.successResponse({ message: 'Dispositivo eliminado correctamente' }));
-
     } catch (e) {
       reject(Service.rejectResponse(
         e.message || 'Invalid input',
@@ -39,7 +39,6 @@ const dispositivoCodigoDELETE = ({ codigo, wsKey }) => new Promise(
     }
   },
 );
-
 /**
 * Consultar dispositivo por su codigo
 *
@@ -61,7 +60,6 @@ const dispositivoCodigoGET = ({ codigo, wsKey }) => new Promise(
       }
 
       resolve(Service.successResponse(result[0]));
-
     } catch (e) {
       reject(Service.rejectResponse(
         e.message || 'Invalid input',
@@ -70,18 +68,17 @@ const dispositivoCodigoGET = ({ codigo, wsKey }) => new Promise(
     }
   },
 );
-
 /**
-* Modificar dispositivo por id
+* Modificar dispositivo
 *
-* id Integer 
-* dispositivo Dispositivo 
+* codigo Integer 
+* body Dispositivo 
 * no response value expected for this operation
 * */
-const dispositivoIdPUT = ({ id, dispositivo }) => new Promise(
+const dispositivoCodigoPUT = ({ codigo, body }) => new Promise(
   async (resolve, reject) => {
     try {
-      const { codigo, descripcion, wsKey } = dispositivo;
+      const { codigo: newCodigo, descripcion, wsKey } = body;
 
       const [keys] = await pool.query('SELECT * FROM restkey WHERE rest_key = ?', [wsKey]);
       if (keys.length === 0) {
@@ -89,15 +86,14 @@ const dispositivoIdPUT = ({ id, dispositivo }) => new Promise(
       }
 
       const [result] = await pool.query(
-        'UPDATE dispositivo SET codigo = ?, descripcion = ? WHERE id = ?',
-        [codigo, descripcion, id]
+        'UPDATE dispositivo SET codigo = ?, descripcion = ? WHERE codigo = ?',
+        [newCodigo, descripcion, codigo]
       );
       if (result.affectedRows === 0) {
         return resolve(Service.rejectResponse('Dispositivo no encontrado', 404));
       }
 
       resolve(Service.successResponse({ message: 'Dispositivo actualizado correctamente' }));
-
     } catch (e) {
       reject(Service.rejectResponse(
         e.message || 'Invalid input',
@@ -106,7 +102,6 @@ const dispositivoIdPUT = ({ id, dispositivo }) => new Promise(
     }
   },
 );
-
 /**
 * Crear nuevo dispositivo
 *
@@ -128,8 +123,7 @@ const dispositivoPOST = ({ dispositivo }) => new Promise(
         [codigo, descripcion]
       );
 
-      resolve(Service.successResponse({ message: 'Dispositivo creado correctamente' }, 201));
-
+      resolve(Service.successResponse({ message: 'Dispositivo creado correctamente' }));
     } catch (e) {
       reject(Service.rejectResponse(
         e.message || 'Invalid input',
@@ -142,6 +136,6 @@ const dispositivoPOST = ({ dispositivo }) => new Promise(
 module.exports = {
   dispositivoCodigoDELETE,
   dispositivoCodigoGET,
-  dispositivoIdPUT,
+  dispositivoCodigoPUT,
   dispositivoPOST,
 };

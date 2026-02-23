@@ -27,7 +27,7 @@ paths:
         required: true
         x-name: body
       responses:
-        "201":
+        "200":
           description: Sala creada correctamente
         "400":
           content:
@@ -175,7 +175,7 @@ paths:
         required: true
         x-name: body
       responses:
-        "201":
+        "200":
           description: Nivel creado correctamente
         "400":
           content:
@@ -274,13 +274,12 @@ paths:
       tags:
       - Niveles
       x-eov-operation-handler: controllers/NivelesController
-  /nivel/{id}:
     put:
-      operationId: nivelIdPUT
+      operationId: nivelNivelPUT
       parameters:
       - explode: false
         in: path
-        name: id
+        name: nivel
         required: true
         schema:
           type: integer
@@ -309,7 +308,7 @@ paths:
           description: WSKey invalida
         "404":
           description: Nivel no encontrado
-      summary: Modificar nivel completo por su id
+      summary: Modificar nivel completo
       tags:
       - Niveles
       x-eov-operation-handler: controllers/NivelesController
@@ -324,7 +323,7 @@ paths:
         required: true
         x-name: body
       responses:
-        "201":
+        "200":
           description: dispositivo creado correctamente
         "400":
           content:
@@ -423,13 +422,12 @@ paths:
       tags:
       - Dispositivos
       x-eov-operation-handler: controllers/DispositivosController
-  /dispositivo/{id}:
     put:
-      operationId: dispositivoIdPUT
+      operationId: dispositivoCodigoPUT
       parameters:
       - explode: false
         in: path
-        name: id
+        name: codigo
         required: true
         schema:
           type: integer
@@ -458,7 +456,7 @@ paths:
           description: WSKey invalida
         "404":
           description: Dispositivo no encontrado
-      summary: Modificar dispositivo por id
+      summary: Modificar dispositivo
       tags:
       - Dispositivos
       x-eov-operation-handler: controllers/DispositivosController
