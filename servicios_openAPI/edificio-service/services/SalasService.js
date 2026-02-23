@@ -4,6 +4,7 @@ const mysql = require('mysql2/promise');
 
 const pool = mysql.createPool({
   host: 'localhost',
+  port: 3307,
   user: 'root',
   password: 'root',
   database: 'practica1'
@@ -72,14 +73,14 @@ const salasCodigoSalaGET = ({ codigoSala, wsKey }) => new Promise(
 /**
 * Modificar datos de Sala
 *
-* id Integer 
-* sala Sala 
+* codigoSala Integer 
+* body Sala 
 * no response value expected for this operation
-* */
-const salasIdPUT = ({ id, sala }) => new Promise(
+*/
+const salasCodigoSalaPUT = ({ codigoSala, body }) => new Promise(
   async (resolve, reject) => {
     try {
-      const { codigoSala, nombre, nivel, wsKey } = sala;
+      const { codigoSala: newCodigoSala, nombre, nivel, wsKey } = body;
 
       const [keys] = await pool.query('SELECT * FROM restkey WHERE rest_key = ?', [wsKey]);
       if (keys.length === 0) {
@@ -87,8 +88,8 @@ const salasIdPUT = ({ id, sala }) => new Promise(
       }
 
       const [result] = await pool.query(
-        'UPDATE salas SET codigoSala = ?, nombre = ?, nivel = ? WHERE id = ?',
-        [codigoSala, nombre, nivel, id]
+        'UPDATE salas SET codigoSala = ?, nombre = ?, nivel = ? WHERE codigoSala = ?',
+        [newCodigoSala, nombre, nivel, codigoSala]
       );
       if (result.affectedRows === 0) {
         return resolve(Service.rejectResponse('Sala no encontrada', 404));
@@ -104,16 +105,17 @@ const salasIdPUT = ({ id, sala }) => new Promise(
     }
   },
 );
+
 /**
 * Crear nueva sala
 *
-* sala Sala 
+* body Sala 
 * no response value expected for this operation
-* */
-const salasPOST = ({ sala }) => new Promise(
+*/
+const salasPOST = ({ body }) => new Promise(
   async (resolve, reject) => {
     try {
-      const { codigoSala, nombre, nivel, wsKey } = sala;
+      const { codigoSala, nombre, nivel, wsKey } = body;
 
       const [keys] = await pool.query('SELECT * FROM restkey WHERE rest_key = ?', [wsKey]);
       if (keys.length === 0) {
@@ -125,7 +127,7 @@ const salasPOST = ({ sala }) => new Promise(
         [codigoSala, nombre, nivel]
       );
 
-      resolve(Service.successResponse({ message: 'Sala creada correctamente' }, 201));
+      resolve(Service.successResponse({ message: 'Sala creada correctamente' }));
 
     } catch (e) {
       reject(Service.rejectResponse(
@@ -139,6 +141,6 @@ const salasPOST = ({ sala }) => new Promise(
 module.exports = {
   salasCodigoSalaDELETE,
   salasCodigoSalaGET,
-  salasIdPUT,
+  salasCodigoSalaPUT,
   salasPOST,
 };

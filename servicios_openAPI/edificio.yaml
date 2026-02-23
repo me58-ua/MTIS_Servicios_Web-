@@ -149,6 +149,7 @@ paths:
         - Salas
       summary: Crear nueva sala
       requestBody:
+        x-name: body
         required: true
         content:
           application/json:
@@ -216,19 +217,19 @@ paths:
           $ref: '#/components/responses/401Error'
         '404':
           description: Sala no encontrada
-
-  /salas/{id}:
+  
     put:
       tags:
         - Salas
       summary: Modificar datos de Sala
       parameters:
-        - name: id
+        - name: codigoSala
           in: path
           required: true
           schema:
             type: integer
       requestBody:
+        x-name: body
         required: true
         content:
           application/json:
@@ -251,6 +252,7 @@ paths:
         - Niveles
       summary: Crear nuevo nivel
       requestBody:
+        x-name: body
         required : true
         content:
           application/json:
@@ -331,6 +333,7 @@ paths:
           schema:
             type: integer
       requestBody:
+        x-name: body
         required: true
         content:
           application/json:
@@ -353,6 +356,7 @@ paths:
         - Dispositivos
       summary: Crear nuevo dispositivo
       requestBody:
+        x-name: body
         required : true
         content:
           application/json:
@@ -433,6 +437,7 @@ paths:
           schema:
             type: integer
       requestBody:
+        x-name: body
         required: true
         content:
           application/json:
@@ -461,6 +466,7 @@ paths:
           schema:
             type: string
       requestBody:
+        x-name: body
         required: true
         content:
           application/json:
@@ -488,6 +494,7 @@ paths:
           schema:
             type: string
       requestBody:
+        x-name: body
         required: true
         content:
           application/json:
@@ -515,6 +522,7 @@ paths:
           schema:
             type: string
       requestBody:
+        x-name: body
         required: true
         content:
           application/json:
