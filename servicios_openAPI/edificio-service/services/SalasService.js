@@ -122,6 +122,12 @@ const salasPOST = ({ body }) => new Promise(
         return resolve(Service.rejectResponse('WSKey invalida', 401));
       }
 
+      // Check if the nivel exists
+      const [niveles] = await pool.query('SELECT * FROM niveles WHERE nivel = ?', [nivel]);
+      if (niveles.length === 0) {
+        return resolve(Service.rejectResponse('No se puede crear sala porque no existe el nivel', 400));
+      }
+
       await pool.query(
         'INSERT INTO salas (codigoSala, nombre, nivel) VALUES (?, ?, ?)',
         [codigoSala, nombre, nivel]
