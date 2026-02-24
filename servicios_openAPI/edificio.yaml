@@ -4,7 +4,7 @@ info:
   description: API REST para la gestion de salas, niveles, Dispositivos y Notificaciones del Edificio
   version: '1.0.0'
 servers:
-  - url: http://localhost:8080/v1
+  - url: http://localhost:8081/v1
 tags:
   - name: Salas
     description: Operaciones sobre las Salas

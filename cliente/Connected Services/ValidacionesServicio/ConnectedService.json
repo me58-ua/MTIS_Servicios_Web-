@@ -1,0 +1,16 @@
+{
+  "ExtendedData": {
+    "inputs": [
+      "http://localhost:8080/p1/services/Validaciones?wsdl"
+    ],
+    "collectionTypes": [
+      "System.Array",
+      "System.Collections.Generic.Dictionary`2"
+    ],
+    "namespaceMappings": [
+      "*, ValidacionesServicio"
+    ],
+    "targetFramework": "net10.0-windows",
+    "typeReuseMode": "All"
+  }
+}

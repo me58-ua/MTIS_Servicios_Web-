@@ -5,7 +5,7 @@ info:
   title: Edificio DTIC
   version: 1.0.0
 servers:
-- url: http://localhost:8080/v1
+- url: http://localhost:8081/v1
 tags:
 - description: Operaciones sobre las Salas
   name: Salas

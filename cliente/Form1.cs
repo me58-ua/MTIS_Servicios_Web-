@@ -10,7 +10,7 @@ namespace cliente
         private FlowLayoutPanel mainPanel;
         private static readonly HttpClient _http = new HttpClient
         {
-            BaseAddress = new Uri("http://localhost:8080/v1/")
+            BaseAddress = new Uri("http://localhost:8081/v1/")
         };
         public Form1()
         {
